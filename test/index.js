@@ -25,10 +25,7 @@ const internals = {
 
         return new GoodGcloud({
             gcloud: {
-                credentials: {
-                    client_email: process.env.GAE_EMAIL,
-                    private_key: process.env.GAE_KEY
-                }
+                keyFilename: 'key.json'
             },
             log: {
                 name: 'test'
