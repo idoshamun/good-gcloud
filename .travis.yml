@@ -3,7 +3,6 @@ language: node_js
 node_js:
 - '4'
 - '5'
-- node
 before_install:
 - openssl aes-256-cbc -K $encrypted_88aca5551d8b_key -iv $encrypted_88aca5551d8b_iv
   -in key.json.enc -out key.json -d
