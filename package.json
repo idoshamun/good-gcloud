@@ -26,12 +26,12 @@
   },
   "homepage": "https://github.com/elegantmonkeys/good-gcloud#readme",
   "dependencies": {
-    "google-cloud": "^0.46.0",
+    "@google-cloud/logging": "^1.0.0",
     "hoek": "^4.1.0",
     "json-stringify-safe": "^5.0.1"
   },
   "devDependencies": {
     "code": "^4.0.0",
-    "lab": "^12.1.0"
+    "lab": "^13.0.4"
   }
 }
