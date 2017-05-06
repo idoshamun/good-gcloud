@@ -1,13 +1,12 @@
 'use strict';
 
-const gcloud = require('gcloud')({
+const logging = require('@google-cloud/logging')({
     projectId: process.env.GAE_LONG_APP_ID,
     credentials: {
         client_email: process.env.GAE_EMAIL,
         private_key: process.env.GAE_KEY
     }
 });
-const logging = gcloud.logging();
 const log = logging.log('my-test');
 const resource = {
     type: 'gce_instance',
