@@ -7,6 +7,7 @@ const logging = require('@google-cloud/logging')({
         private_key: process.env.GAE_KEY
     }
 });
+
 const log = logging.log('my-test');
 const resource = {
     type: 'gce_instance',
@@ -35,5 +36,6 @@ log.write(entry, (err) => {
     if (err) {
         console.error(err);
     }
+
     process.exit();
 });
