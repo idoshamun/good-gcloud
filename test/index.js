@@ -2,8 +2,8 @@
 
 const Stream = require('stream');
 
-const Code = require('code');
-const Lab = require('lab');
+const Code = require('@hapi/code');
+const Lab = require('@hapi/lab');
 
 const GoodGcloud = require('..');
 
@@ -16,8 +16,8 @@ const internals = {
     readStream() {
 
         const stream = new Stream.Readable({ objectMode: true });
-        stream._read = () => {
-        };
+        stream._read = () => {};
+
         return stream;
     },
 
@@ -33,7 +33,7 @@ const internals = {
         });
     },
 
-    checkForNoErrors(stream, done) {
+    checkForNoErrors(stream, resolve) {
 
         const errors = [];
 
@@ -45,179 +45,199 @@ const internals = {
         stream.on('finish', () => {
 
             expect(errors).to.be.empty();
-            done();
+            return resolve();
         });
     }
 };
 
 describe('GoodGcloud', () => {
 
-    it('should create stream without configuration', { plan: 1 }, (done) => {
+    it('should create stream without configuration', { plan: 1 }, () => {
 
         const stream = new GoodGcloud();
         expect(stream).to.exist();
-        done();
     });
 
-    it('should not send log without data', { plan: 1 }, (done) => {
+    it('should not send log without data', { plan: 1 }, () => {
 
-        const stream = internals.gcloudStream();
-        internals.checkForNoErrors(stream, done);
+        return new Promise((resolve) => {
 
-        const read = internals.readStream();
+            const stream = internals.gcloudStream();
+            internals.checkForNoErrors(stream, resolve);
 
-        read.pipe(stream);
+            const read = internals.readStream();
 
-        read.push({
-            event: 'log',
-            timestamp: new Date().getTime(),
-            tags: ['api', 'tag', 'debug']
+            read.pipe(stream);
+
+            read.push({
+                event: 'log',
+                timestamp: new Date().getTime(),
+                tags: ['api', 'tag', 'debug']
+            });
+            read.push(null);
         });
-        read.push(null);
     });
 
     it('should set severity by tag and send log', { plan: 1 }, (done) => {
 
-        const stream = internals.gcloudStream();
-        internals.checkForNoErrors(stream, done);
+        return new Promise((resolve) => {
 
-        const read = internals.readStream();
+            const stream = internals.gcloudStream();
+            internals.checkForNoErrors(stream, resolve);
 
-        read.pipe(stream);
+            const read = internals.readStream();
 
-        read.push({
-            event: 'log',
-            timestamp: new Date().getTime(),
-            tags: ['api', 'tag', 'debug'],
-            data: { key: 'value' }
+            read.pipe(stream);
+
+            read.push({
+                event: 'log',
+                timestamp: new Date().getTime(),
+                tags: ['api', 'tag', 'debug'],
+                data: { key: 'value' }
+            });
+            read.push(null);
         });
-        read.push(null);
     });
 
     it('should set data as message and send log', { plan: 1 }, (done) => {
 
-        const stream = internals.gcloudStream();
-        internals.checkForNoErrors(stream, done);
+        return new Promise((resolve) => {
 
-        const read = internals.readStream();
+            const stream = internals.gcloudStream();
+            internals.checkForNoErrors(stream, resolve);
 
-        read.pipe(stream);
+            const read = internals.readStream();
 
-        read.push({
-            event: 'log',
-            timestamp: new Date().getTime(),
-            tags: 'custom',
-            data: 'my custom log'
+            read.pipe(stream);
+
+            read.push({
+                event: 'log',
+                timestamp: new Date().getTime(),
+                tags: 'custom',
+                data: 'my custom log'
+            });
+            read.push(null);
         });
-        read.push(null);
     });
 
     it('should set a custom message and send log', { plan: 1 }, (done) => {
 
-        const stream = internals.gcloudStream();
-        internals.checkForNoErrors(stream, done);
+        return new Promise((resolve) => {
 
-        const read = internals.readStream();
+            const stream = internals.gcloudStream();
+            internals.checkForNoErrors(stream, resolve);
 
-        read.pipe(stream);
+            const read = internals.readStream();
 
-        read.push({
-            event: 'log',
-            timestamp: new Date().getTime(),
-            data: { message: 'hello world', key: 'value' }
+            read.pipe(stream);
+
+            read.push({
+                event: 'log',
+                timestamp: new Date().getTime(),
+                data: { message: 'hello world', key: 'value' }
+            });
+            read.push(null);
         });
-        read.push(null);
     });
 
     it('should send an error log', { plan: 1 }, (done) => {
 
-        const stream = internals.gcloudStream();
-        internals.checkForNoErrors(stream, done);
+        return new Promise((resolve) => {
 
-        const read = internals.readStream();
+            const stream = internals.gcloudStream();
+            internals.checkForNoErrors(stream, resolve);
 
-        read.pipe(stream);
+            const read = internals.readStream();
 
-        read.push({
-            event: 'error',
-            timestamp: new Date().getTime(),
-            error: {
-                message: 'something went wrong!',
-                stack: 'index.js line 100'
-            }
+            read.pipe(stream);
+
+            read.push({
+                event: 'error',
+                timestamp: new Date().getTime(),
+                error: new Error('something went wrong!')
+            });
+            read.push(null);
         });
-        read.push(null);
     });
 
     it('should send an ops log', { plan: 1 }, (done) => {
 
-        const stream = internals.gcloudStream();
-        internals.checkForNoErrors(stream, done);
+        return new Promise((resolve) => {
 
-        const read = internals.readStream();
+            const stream = internals.gcloudStream();
+            internals.checkForNoErrors(stream, resolve);
 
-        read.pipe(stream);
+            const read = internals.readStream();
 
-        read.push({
-            event: 'ops',
-            timestamp: new Date().getTime(),
-            proc: {
-                mem: {
-                    rss: 4 * 1024 * 1024
+            read.pipe(stream);
+
+            read.push({
+                event: 'ops',
+                timestamp: new Date().getTime(),
+                proc: {
+                    mem: {
+                        rss: 4 * 1024 * 1024
+                    },
+                    uptime: 5
                 },
-                uptime: 5
-            },
-            os: {
-                load: 40
-            }
+                os: {
+                    load: 40
+                }
+            });
+            read.push(null);
         });
-        read.push(null);
     });
 
     it('should send a response log', { plan: 1 }, (done) => {
 
-        const stream = internals.gcloudStream();
-        internals.checkForNoErrors(stream, done);
+        return new Promise((resolve) => {
 
-        const read = internals.readStream();
+            const stream = internals.gcloudStream();
+            internals.checkForNoErrors(stream, resolve);
 
-        read.pipe(stream);
+            const read = internals.readStream();
 
-        read.push({
-            event: 'response',
-            timestamp: new Date().getTime(),
-            instance: 'http://localhost:3000',
-            method: 'GET',
-            path: '/test',
-            statusCode: 200,
-            responseTime: 100
+            read.pipe(stream);
+
+            read.push({
+                event: 'response',
+                timestamp: new Date().getTime(),
+                instance: 'http://localhost:3000',
+                method: 'GET',
+                path: '/test',
+                statusCode: 200,
+                responseTime: 100
+            });
+            read.push(null);
         });
-        read.push(null);
     });
 
     it('should send a response log with query', { plan: 1 }, (done) => {
 
-        const stream = internals.gcloudStream();
-        internals.checkForNoErrors(stream, done);
+        return new Promise((resolve) => {
 
-        const read = internals.readStream();
+            const stream = internals.gcloudStream();
+            internals.checkForNoErrors(stream, resolve);
 
-        read.pipe(stream);
+            const read = internals.readStream();
 
-        read.push({
-            event: 'response',
-            timestamp: new Date().getTime(),
-            instance: 'http://localhost:3000',
-            method: 'GET',
-            path: '/test',
-            query: {
-                var1: 'value1',
-                var2: 'value2'
-            },
-            statusCode: 200,
-            responseTime: 100
+            read.pipe(stream);
+
+            read.push({
+                event: 'response',
+                timestamp: new Date().getTime(),
+                instance: 'http://localhost:3000',
+                method: 'GET',
+                path: '/test',
+                query: {
+                    var1: 'value1',
+                    var2: 'value2'
+                },
+                statusCode: 200,
+                responseTime: 100
+            });
+            read.push(null);
         });
-        read.push(null);
     });
 });
 
