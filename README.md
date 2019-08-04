@@ -1,7 +1,7 @@
 # good-gcloud
 Google Cloud Platform logging broadcasting for Good process monitor
 
-[![Build status](https://travis-ci.org/elegantmonkeys/good-gcloud.svg?branch=master)](https://travis-ci.org/elegantmonkeys/good-gcloud)
+[![Build status](https://travis-ci.org/elegantmonkeys/good-gcloud.svg?branch=master)](https://travis-ci.org/elegantmonkeys/good-gcloud) [![Greenkeeper badge](https://badges.greenkeeper.io/elegantmonkeys/good-gcloud.svg)](https://greenkeeper.io/)
 
 ## Good Gcloud
 
