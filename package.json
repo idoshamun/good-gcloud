@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/elegantmonkeys/good-gcloud#readme",
   "dependencies": {
-    "@google-cloud/logging": "^6.0.0",
+    "@google-cloud/logging": "^7.0.0",
     "@hapi/hoek": "^9.0.0",
     "json-stringify-safe": "^5.0.1"
   },
