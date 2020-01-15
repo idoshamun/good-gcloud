@@ -1,6 +1,6 @@
 {
   "name": "good-gcloud",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Google Cloud Platform logging broadcasting for Good process monitor",
   "main": "lib/index.js",
   "scripts": {
